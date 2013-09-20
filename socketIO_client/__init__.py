@@ -316,7 +316,7 @@ class _SocketIO(object):
             raise SocketIOError('Could not parse handshake')
         socketScheme = 'wss' if secure else 'ws'
         socketURL = '%s://%s/websocket/%s' % (socketScheme, baseURL, sessionID)
-        self.connection = create_connection(socketURL)
+        self.connection = create_connection(socketURL, header={"Cookie: " + ";".join("%s=%s" % (k,v) for (k,v) in requests.utils.dict_from_cookiejar(response.cookies).iteritems())})
         self.heartbeatInterval = heartbeatTimeout - 2
         self.callbackByMessageID = {}
 
